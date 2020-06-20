@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lyricnet.tech/LyricNet",
+  "homepage": "https://dev-hacks-2020.github.io/LyricNet/",
   "dependencies": {
     "@material-ui/core": "^4.10.2",
     "@testing-library/jest-dom": "^4.2.4",
