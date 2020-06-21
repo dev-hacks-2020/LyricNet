@@ -13,7 +13,7 @@ def get_songs(singer, write_to_file = False):
     artist = genius.search_artist(singer, max_songs=500)
     
     if write_to_file:
-        with open('Taylor_Swift_2.txt', 'x') as text:
+        with open(singer+'.txt', 'x') as text:
             for song in artist.songs:
                 text.write(song.lyrics)
                 text.write(
