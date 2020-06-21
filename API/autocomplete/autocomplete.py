@@ -16,7 +16,14 @@ def clean_name(file):
 name_to_json = dict((clean_name(json_file), json_file) for json_file in json_files)
 
 
-def get_next_word(input_word, author: str):
+
+def get_next_word(input_word: str, author: str):
+    """
+    Function to get the a singular word based off a given word
+    :param input_word: A string representing the word a user has typed and wants a word to autocomplete it
+    :param author: The type of author a user wants to mimic. Available options are all the names in the jsons/ folder, all lowercase, and replaced spaces
+    :return: A string representing the next predicted word
+    """
     try:
         json_file = name_to_json[author.lower()]
     except KeyError:
