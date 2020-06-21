@@ -9,43 +9,29 @@ class Complete extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      artists: [
-        'Adele',
-        'Al Green',
-        'Alicia Keys',
-        'Amy Winehouse',
-        'Beatles',
-        'Bieber',
-        'Bjork',
-        'Blink 182',
-        'Bob Dylan',
-        'Bob Marley',
-        'Britney Spears',
-        'Bruce Springsteen',
-        'Bruno Mars',
-        'Cake',
-        'Dickinson',
-        'Disney',
-        'Dj Khaled',
-        'Dolly Parton',
-        'Dr Seuss',
-        'Drake',
-        'Eminem',
-        'Janisjoplin',
-        'Jimi Hendrix',
-        'Johnny Cash',
-        'Joni Mitchell',
-        'Kanye West',
-        'Kanye',
-        'Lady Gaga',
-        'Lil Wayne',
-      ],
+      artists: [],
       artist: '',
       lyrics: '',
+      customArtist: '',
+      songs: 1,
       loading: false,
+      training: false,
     };
     this.focus = React.createRef();
   }
+
+  train = () => {
+    this.setState({ training: true });
+    axios
+      .post('http://127.0.0.1:5000/complete', {
+        artist: this.state.customArtist,
+        songs: this.state.songs,
+      })
+      .then((res) => {
+        this.setState({ training: false });
+        this.getArtists();
+      });
+  };
 
   getAnswer = (cb) => {
     this.setState({ loading: true });
@@ -75,7 +61,15 @@ class Complete extends Component {
       });
   };
 
-  componentDidMount() {}
+  getArtists = () => {
+    axios.get('http://127.0.0.1:5000/complete-artists').then((res) => {
+      this.setState({ artists: res.data });
+    });
+  };
+
+  componentDidMount() {
+    this.getArtists();
+  }
 
   render() {
     return (
@@ -121,7 +115,7 @@ class Complete extends Component {
                 </header>
                 <Row className="justify-content-center">
                   {this.state.artists.map((artist) => (
-                    <Col xs={3}>
+                    <Col>
                       <a
                         className="button"
                         onClick={() => {
@@ -147,9 +141,7 @@ class Complete extends Component {
                         if (
                           e.key === 'Enter' &&
                           !(
-                            this.state.artist === '' ||
-                            this.state.lyrics === '' ||
-                            this.state.lyrics.length > 300
+                            this.state.artist === '' || this.state.lyrics === ''
                           )
                         ) {
                           e.preventDefault();
@@ -159,6 +151,7 @@ class Complete extends Component {
                     >
                       <FormControl
                         as="textarea"
+                        rows="10"
                         value={this.state.lyrics}
                         id="words"
                       />
@@ -178,9 +171,7 @@ class Complete extends Component {
                         className={
                           'button primary' +
                           ` ${
-                            this.state.artist === '' ||
-                            this.state.lyrics === '' ||
-                            this.state.lyrics.length > 300
+                            this.state.artist === '' || this.state.lyrics === ''
                               ? 'disabled'
                               : ''
                           }`
@@ -195,28 +186,62 @@ class Complete extends Component {
             </div>
           </section>
         </div>
-        {this.state.answer ? (
-          <div
-            id="main"
-            style={{
-              marginTop: '3em',
-              marginBottom: '3em',
-            }}
-          >
-            <section className="main" id="lyrics">
-              <div className="spotlight">
-                <div className="content">
-                  <header className="major">
-                    <h2>Answer</h2>
-                  </header>
-                </div>
+
+        <div id="main" style={{ marginTop: '3em', marginBottom: '3em' }}>
+          <section className="main">
+            <div className="spotlight">
+              <div className="content">
+                <header className="major">
+                  <h2>Train On A Custom Artist</h2>
+                </header>
+                <Row>
+                  <Col>
+                    <label htmlFor="words">Custom Artist Name</label>
+                    <InputGroup
+                      onChange={(e) => {
+                        this.setState({ customArtist: e.target.value });
+                      }}
+                    >
+                      <FormControl value={this.state.customArtist} id="words" />
+                    </InputGroup>
+                  </Col>
+                  <Col>
+                    <label htmlFor="songs">Number Of Songs To Train On</label>
+                    <InputGroup
+                      onChange={(e) => {
+                        this.setState({ songs: e.target.value });
+                      }}
+                    >
+                      <FormControl
+                        value={this.state.songs}
+                        type="number"
+                        id="songs"
+                      />
+                    </InputGroup>
+                  </Col>
+                  <Col>
+                    <Link
+                      onClick={this.train}
+                      className={
+                        'button primary' +
+                        ` ${
+                          this.state.customArtist === '' ||
+                          !this.state.songs ||
+                          this.state.songs < 0
+                            ? 'disabled'
+                            : ''
+                        }`
+                      }
+                    >
+                      Train
+                    </Link>
+                    {this.state.training && <h3>Training...</h3>}
+                  </Col>
+                </Row>
               </div>
-              <p class="text-center" ref={this.focus}>
-                {this.state.answer}
-              </p>
-            </section>
-          </div>
-        ) : null}
+            </div>
+          </section>
+        </div>
       </div>
     );
   }
