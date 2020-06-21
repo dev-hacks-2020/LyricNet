@@ -71,13 +71,12 @@ def generate_main(singer, beginning, length_):
   model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
   model.build(tf.TensorShape([1, None]))
 
-  len_gen = length_
   input_eval = [charidx[start] for start in beginning]
   input_eval = tf.expand_dims(input_eval, 0)
   text = []
   temp = 1.0
   model.reset_states()
-  for i in range(len_gen):
+  for i in range(length_):
       predictions = model(input_eval)
       predictions = tf.squeeze(predictions, 0)
       predictions = predictions / temp
