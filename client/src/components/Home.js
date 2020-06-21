@@ -125,9 +125,9 @@ function Home() {
                 <h2>Powered By Google Cloud Platform</h2>
               </header>
               <p>
-                A bucket is used to deploy the React app, and App Engine is used
-                to host the flask back end, which contains the machine learning
-                model.
+                A <strong>bucket</strong> is used to deploy the React app, and{' '}
+                <strong>App Engine</strong> is used to host the flask back end,
+                which contains the machine learning model.
               </p>
             </div>
             <span className="image">
