@@ -51,7 +51,12 @@ class Complete extends Component {
     this.setState({ loading: true });
     axios
       .get('http://127.0.0.1:5000/complete', {
-        params: { input: this.state.lyrics, artist: this.state.artist },
+        params: {
+          input: this.state.lyrics.split(' ')[
+            this.state.lyrics.split(' ').length - 1
+          ],
+          artist: this.state.artist,
+        },
       })
       .then((res) => {
         this.setState((state, props) => ({
@@ -131,7 +136,9 @@ class Complete extends Component {
                 </Row>
                 <Row className="justify-content-center">
                   <Col xs={9}>
-                    <label htmlFor="words">Lyrics</label>
+                    <label htmlFor="words">
+                      Lyrics (Press Enter to complete)
+                    </label>
                     <InputGroup
                       onChange={(e) => {
                         this.setState({ lyrics: e.target.value });
