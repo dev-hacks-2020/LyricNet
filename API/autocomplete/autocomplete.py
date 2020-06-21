@@ -3,7 +3,7 @@ import json
 import os
 import glob
 
-json_files = glob.glob("jsons/*.json")
+json_files = glob.glob("./autocomplete/jsons/*.json")
 
 
 def clean_name(file):
@@ -13,7 +13,8 @@ def clean_name(file):
     return name.lower()
 
 
-name_to_json = dict((clean_name(json_file), json_file) for json_file in json_files)
+name_to_json = dict((clean_name(json_file), json_file)
+                    for json_file in json_files)
 
 
 def get_next_word(input_word: str, author: str):

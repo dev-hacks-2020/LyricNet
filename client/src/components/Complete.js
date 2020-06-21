@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import '../assets/css/main.css';
 import { Row, Col, InputGroup, FormControl, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import QuestionImg from '../images/question.svg';
+import CompleteImg from '../images/fill_in.svg';
 import axios from 'axios';
 
-class Question extends Component {
+class Complete extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,8 +41,7 @@ class Question extends Component {
         'Lil Wayne',
       ],
       artist: '',
-      question: '',
-      answer: null,
+      lyrics: '',
       loading: false,
     };
     this.focus = React.createRef();
@@ -51,11 +50,14 @@ class Question extends Component {
   getAnswer = (cb) => {
     this.setState({ loading: true });
     axios
-      .get('http://127.0.0.1:5000/question', {
-        params: { question: this.state.question, artist: this.state.artist },
+      .get('http://127.0.0.1:5000/complete', {
+        params: { input: this.state.lyrics, artist: this.state.artist },
       })
       .then((res) => {
-        this.setState({ answer: res.data.answer, loading: false });
+        this.setState((state, props) => ({
+          lyrics: state.lyrics + ' ' + res.data.word,
+          loading: false,
+        }));
         cb();
       });
   };
@@ -77,14 +79,14 @@ class Question extends Component {
           <Row>
             <Col xs={7}>
               <span className="logo">
-                <img src={QuestionImg} alt="" />
+                <img src={CompleteImg} alt="" />
               </span>
             </Col>
             <Col xs={5}>
-              <h1>Question Answerer</h1>
+              <h1>Lyrics Completer</h1>
               <p>
-                <strong>Ask questions</strong> about your favorite artists, and
-                get answers using AI.
+                <strong>Complete lyrics</strong> using the style of your
+                favorite artists using AI.
                 <br />
               </p>
             </Col>
@@ -100,7 +102,7 @@ class Question extends Component {
               <Link to="/generate">Generate Lyrics</Link>
             </li>
             <li>
-              <Link to="/complete">Complete Lyrics</Link>
+              <Link to="/question">Ask A Question</Link>
             </li>
           </ul>
         </nav>
@@ -128,36 +130,59 @@ class Question extends Component {
                   ))}
                 </Row>
                 <Row className="justify-content-center">
-                  <Col xs={6}>
-                    <label htmlFor="words">Question</label>
+                  <Col xs={9}>
+                    <label htmlFor="words">Lyrics</label>
                     <InputGroup
                       onChange={(e) => {
-                        this.setState({ question: e.target.value });
+                        this.setState({ lyrics: e.target.value });
+                      }}
+                      onKeyPress={(e) => {
+                        if (
+                          e.key === 'Enter' &&
+                          !(
+                            this.state.artist === '' ||
+                            this.state.lyrics === '' ||
+                            this.state.lyrics.length > 300
+                          )
+                        ) {
+                          e.preventDefault();
+                          this.getAnswer(this.handleOnClick);
+                        }
                       }}
                     >
-                      <FormControl value={this.state.question} id="words" />
+                      <FormControl
+                        as="textarea"
+                        value={this.state.lyrics}
+                        id="words"
+                      />
                     </InputGroup>
                   </Col>
-                  <Col xs={3}>
-                    <Link
-                      onClick={() => {
-                        this.getAnswer(this.handleOnClick);
-                      }}
-                      className={
-                        'button primary' +
-                        ` ${
-                          this.state.artist === '' ||
-                          this.state.question === '' ||
-                          this.state.question.length > 100
-                            ? 'disabled'
-                            : ''
-                        }`
-                      }
-                    >
-                      Get Answer
-                    </Link>
-                  </Col>
-                  <Col xs={3}>{this.state.loading && <h3>Loading...</h3>}</Col>
+
+                  {this.state.loading ? (
+                    <Col xs={3}>
+                      <h3>Loading...</h3>
+                    </Col>
+                  ) : (
+                    <Col xs={3}>
+                      <Link
+                        onClick={() => {
+                          this.getAnswer(this.handleOnClick);
+                        }}
+                        className={
+                          'button primary' +
+                          ` ${
+                            this.state.artist === '' ||
+                            this.state.lyrics === '' ||
+                            this.state.lyrics.length > 300
+                              ? 'disabled'
+                              : ''
+                          }`
+                        }
+                      >
+                        Complete
+                      </Link>
+                    </Col>
+                  )}
                 </Row>
               </div>
             </div>
@@ -190,4 +215,4 @@ class Question extends Component {
   }
 }
 
-export default Question;
+export default Complete;

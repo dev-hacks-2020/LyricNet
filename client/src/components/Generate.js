@@ -93,6 +93,9 @@ class Generate extends Component {
             <li>
               <Link to="/question">Ask A Question</Link>
             </li>
+            <li>
+              <Link to="/complete">Complete Lyrics</Link>
+            </li>
           </ul>
         </nav>
 

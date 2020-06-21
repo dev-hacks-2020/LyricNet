@@ -6,6 +6,7 @@ import Question from '../images/question.svg';
 import { Row, Col, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import GCP from '../images/gcp.png';
+import Complete from '../images/fill_in.svg';
 
 function Home() {
   return (
@@ -23,23 +24,37 @@ function Home() {
             <h1>LyricNet</h1>
             <p>
               <strong>Generate lyrics</strong> that sound like your favorite
-              artists and <strong>ask them questions</strong> using AI.
+              artists, <strong>ask them questions</strong>, and{' '}
+              <strong>autocomplete your lyrics</strong> in their style using AI.
               <br />
             </p>
-            <Link
-              classNameName="button"
-              to="/generate"
-              style={{ margin: '1em', marginBottom: '0.5em' }}
-            >
-              Generate Lyrics
-            </Link>
-            <Link
-              to="/question"
-              classNameName="button"
-              style={{ margin: '1em', marginTop: '0.5em' }}
-            >
-              Ask A Question
-            </Link>
+            <Col>
+              <Link
+                classNameName="button"
+                to="/generate"
+                style={{ margin: '1em', marginBottom: '0.5em' }}
+              >
+                Generate Lyrics
+              </Link>
+            </Col>
+            <Col>
+              <Link
+                to="/question"
+                classNameName="button"
+                style={{ margin: '1em', marginTop: '0.5em' }}
+              >
+                Ask A Question
+              </Link>
+            </Col>
+            <Col>
+              <Link
+                to="/complete"
+                classNameName="button"
+                style={{ margin: '1em', marginTop: '0.5em' }}
+              >
+                Autocomplete Lyrics
+              </Link>
+            </Col>
           </Col>
         </Row>
       </header>
@@ -48,13 +63,13 @@ function Home() {
       <nav id="nav">
         <ul>
           <li>
-            <a href="#generate">Lyrics Generation</a>
+            <Link to="/generate">Lyrics Generation</Link>
           </li>
           <li>
-            <a href="#question">Question Answering</a>
+            <Link to="/question">Question Answering</Link>
           </li>
           <li>
-            <a href="#gcp">Google Cloud Platform</a>
+            <Link to="/complete">Lyrics Autocompletion</Link>
           </li>
         </ul>
       </nav>
@@ -114,6 +129,31 @@ function Home() {
             </div>
             <span className="image">
               <img src={Question} alt="" />
+            </span>
+          </div>
+        </section>
+
+        {/* <!-- First Section --> */}
+        <section id="question" className="main">
+          <div className="spotlight">
+            <div className="content">
+              <header className="major">
+                <h2>Lyrics Auto-Completion</h2>
+              </header>
+              <p>
+                Using a <strong>markov decision chain</strong>, LyricNet can
+                predict the next likely word to come after a previous word.
+              </p>
+              <ul className="actions">
+                <li>
+                  <Link to="/complete" className="button">
+                    Complete Lyrics
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <span className="image">
+              <img src={Complete} alt="" />
             </span>
           </div>
         </section>
