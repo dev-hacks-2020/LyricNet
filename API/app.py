@@ -5,6 +5,7 @@ from question.question import get_answer
 from happytransformer import HappyBERT
 from autocomplete.learn import train_custom
 from complete_my_song.autocomplete_generator import generate_main
+from lyrics_generation.generator import get_song
 import glob
 
 bert = HappyBERT()
@@ -52,7 +53,7 @@ def question():
 
 @app.route('/generate', methods=['GET'])
 def generate():
-    return jsonify({})
+    return jsonify({'lyrics': get_song(request.args.get('artist'))})
 
 
 if __name__ == '__main__':

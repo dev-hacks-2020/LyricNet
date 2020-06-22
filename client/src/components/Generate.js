@@ -4,6 +4,7 @@ import { Row, Col, InputGroup, FormControl, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import TextGen from '../images/text_gen.svg';
 import axios from 'axios';
+const filter = require('leo-profanity');
 
 class Generate extends Component {
   constructor(props) {
@@ -43,6 +44,7 @@ class Generate extends Component {
       artist: '',
       words: 50,
       lyrics: null,
+      generating: false,
     };
     this.focus = React.createRef();
   }
@@ -58,10 +60,14 @@ class Generate extends Component {
   componentDidMount() {}
 
   getLyrics = (cb) => {
-    axios.get('https://jsonplaceholder.typicode.com/posts/1').then((res) => {
-      this.setState({ lyrics: res.data.body });
-      cb();
-    });
+    axios
+      .get('http://127.0.0.1:5000/generate', {
+        params: { artist: this.state.artist },
+      })
+      .then((res) => {
+        this.setState({ lyrics: res.data.lyrics.join('\n') });
+        cb();
+      });
   };
 
   render() {
@@ -122,7 +128,7 @@ class Generate extends Component {
                   ))}
                 </Row>
                 <Row className="justify-content-center">
-                  <Col xs={6}>
+                  {/* <Col xs={6}>
                     <label htmlFor="words">Number Of Words To Generate</label>
                     <InputGroup
                       onChange={(e) => {
@@ -135,7 +141,7 @@ class Generate extends Component {
                         id="words"
                       />
                     </InputGroup>
-                  </Col>
+                  </Col> */}
                   <Col xs={6}>
                     <Link
                       onClick={() => {
@@ -153,12 +159,15 @@ class Generate extends Component {
                       Generate Lyrics
                     </Link>
                   </Col>
+                  <Col className="primary">
+                    {this.state.generating && <h3>Generating...</h3>}
+                  </Col>
                 </Row>
               </div>
             </div>
           </section>
         </div>
-        {this.state.lyrics ? (
+        {this.state.lyrics && (
           <div
             id="main"
             style={{
@@ -174,11 +183,9 @@ class Generate extends Component {
                   </header>
                 </div>
               </div>
-              <p ref={this.focus}>{this.state.lyrics}</p>
+              <p ref={this.focus}>{filter.clean(this.state.lyrics)}</p>
             </section>
           </div>
-        ) : (
-          <Spinner animation="border" variant="primary" ref={this.focus} />
         )}
       </div>
     );
