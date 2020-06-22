@@ -72,7 +72,7 @@ class Question extends Component {
   getAnswer = (cb) => {
     this.setState({ loading: true });
     axios
-      .get('http://127.0.0.1:5000/question', {
+      .get('http://35.223.180.255:5000/question', {
         params: { question: this.state.question, artist: this.state.artist },
       })
       .then((res) => {

@@ -63,7 +63,7 @@ class Generate extends Component {
 
   getLyrics = (cb) => {
     axios
-      .get('http://127.0.0.1:5000/generate', {
+      .get('http://35.223.180.255:5000/generate', {
         params: {
           artist: this.state.artist,
           lines: this.state.lines,

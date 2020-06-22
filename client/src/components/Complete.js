@@ -28,7 +28,7 @@ class Complete extends Component {
     this.setState({ training: true });
     if (this.state.model === 'Markov Chain')
       axios
-        .post('http://127.0.0.1:5000/complete-markov', {
+        .post('http://35.223.180.255:5000/complete-markov', {
           artist: this.state.customArtist,
           songs: this.state.songs,
         })
@@ -38,7 +38,7 @@ class Complete extends Component {
         });
     else
       axios
-        .post('http://127.0.0.1:5000/complete-gru', {
+        .post('http://35.223.180.255:5000/complete-gru', {
           artist: this.state.customArtist,
           songs: this.state.songs,
           epochs: this.state.epochs,
@@ -53,7 +53,7 @@ class Complete extends Component {
     this.setState({ loading: true });
     if (this.state.model === 'Markov Chain') {
       axios
-        .get('http://127.0.0.1:5000/complete-markov', {
+        .get('http://35.223.180.255:5000/complete-markov', {
           params: {
             input: this.state.lyrics.split(' ')[
               this.state.lyrics.split(' ').length - 1
@@ -81,10 +81,12 @@ class Complete extends Component {
   };
 
   getArtists = () => {
-    axios.get('http://127.0.0.1:5000/complete-markov-artists').then((res) => {
-      this.setState({ markovArtists: res.data });
-    });
-    axios.get('http://127.0.0.1:5000/complete-gru-artists').then((res) => {
+    axios
+      .get('http://35.223.180.255:5000/complete-markov-artists')
+      .then((res) => {
+        this.setState({ markovArtists: res.data });
+      });
+    axios.get('http://35.223.180.255:5000/complete-gru-artists').then((res) => {
       this.setState({ gruArtists: res.data });
     });
   };
