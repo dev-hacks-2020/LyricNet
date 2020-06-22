@@ -169,6 +169,3 @@ def get_song(artist):
   vectors = compose_rap(bars, rhyme_list, text_file, model)
   rap = vectors_into_song(vectors, bars, rhyme_list)
   return rap
-
-artist = 'radiohead'
-get_song(artist)
