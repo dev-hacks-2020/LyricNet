@@ -4,6 +4,7 @@ from autocomplete.autocomplete import get_next_word
 from question.question import get_answer
 from happytransformer import HappyBERT
 from autocomplete.learn import train_custom
+from complete_my_song.autocomplete_generator import generate_main
 import glob
 
 bert = HappyBERT()
@@ -12,21 +13,35 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route('/complete-artists', methods=['GET'])
-def complete_artist():
+@app.route('/complete-markov-artists', methods=['GET'])
+def complete_markov_artists():
     json_files = glob.glob("./autocomplete/jsons/*.json")
     return jsonify(sorted(list(map(lambda file: file[21:-5].replace('-', ' ').title(), json_files))))
 
 
-@app.route('/complete', methods=['GET'])
+@app.route('/complete-gru-artists', methods=['GET'])
+def complete_gru_artists():
+    return jsonify([])
+    # json_files = glob.glob("./autocomplete/jsons/*.json")
+    # return jsonify(sorted(list(map(lambda file: file[21:-5].replace('-', ' ').title(), json_files))))
+
+
+@app.route('/complete-markov', methods=['GET'])
 def complete():
     return jsonify({'word': get_next_word(request.args.get('input'), request.args.get('artist'))})
 
 
-@app.route('/complete', methods=['POST'])
-def complete_train():
+@app.route('/complete-markov', methods=['POST'])
+def complete_markov_train():
     data = request.get_json(force=True)
     train_custom(data['artist'], data['songs'])
+    return jsonify({'message': 'success'})
+
+
+@app.route('/complete-gru', methods=['POST'])
+def complete_gru_train():
+    data = request.get_json(force=True)
+    generate_main(data['artist'], data['songs'], data)
     return jsonify({'message': 'success'})
 
 

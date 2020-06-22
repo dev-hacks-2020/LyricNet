@@ -11,14 +11,14 @@ BUFFER_SIZE = 10000
 EPOCHS = 50
 
 
-def generate_main(singer, beginning, length_):
+def generate_main(singer, songs, beginning, length_):
     """
     takes: singer (str) - the style of the song,
            beginning(str) - input song start,
             length_(int) - length of the song to be generated
     """
 
-    text = genius.get_songs(singer)
+    text = " ".join([song.lyrics for song in genius.get_songs(singer, songs)])
     vocab = sorted(set(text))
     vocab_size = len(vocab)
     charidx = {c: indx for indx, c in enumerate(vocab)}
@@ -88,4 +88,4 @@ def generate_main(singer, beginning, length_):
     return beginning + ''.join(text)
 
 
-generate_main('Lil Wayne', 'When I throw a party', 100)
+# print(generate_main('Lil Wayne', 3, 'When I throw a party', 100))

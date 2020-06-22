@@ -27,11 +27,13 @@ def get_dictionary(words: list, result_dictionary=None):
 def train_custom(artist, songs):
     songs = get_songs(artist, songs)
     json_out = f'./autocomplete/jsons/{artist.lower().replace(" ", "-")}.json'
-    with open(json_out, 'x'):
-        word_list = list(
-            map(lambda l: l.split(" "), songs.splitlines()))
-        dictionary = get_dictionary(
-            list(itertools.chain.from_iterable(word_list)))
+    if not os.path.exists(json_out):
+        open(json_out, 'x').close()
+    word_list = list(
+        map(lambda l: l.split(" "), songs.splitlines()))
+    dictionary = get_dictionary(
+        list(itertools.chain.from_iterable(word_list)))
+
     with open(json_out, 'w') as out:
         json.dump(dictionary, out)
 
