@@ -3,7 +3,7 @@
 ## Website to generate lyrics like your favorite artists using deep learning
 
 ![Website](docs/images/web.png)
-![Devpost](https://devpost.com/software/lyricnet)
+[Devpost](https://devpost.com/software/lyricnet)
 
 # Inspiration
 
