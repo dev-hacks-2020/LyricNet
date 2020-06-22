@@ -10,9 +10,7 @@ import Complete from '../images/fill_in.svg';
 
 function Home() {
   return (
-    // <!-- Wrapper -->
     <div id="wrapper">
-      {/* <!-- Header --> */}
       <header id="header" className="alt">
         <Row>
           <Col xs={7}>
@@ -59,7 +57,6 @@ function Home() {
         </Row>
       </header>
 
-      {/* <!-- Nav --> */}
       <nav id="nav">
         <ul>
           <li>
@@ -74,9 +71,7 @@ function Home() {
         </ul>
       </nav>
 
-      {/* <!-- Main --> */}
       <div id="main">
-        {/* <!-- Introduction --> */}
         <section id="generate" className="main">
           <div className="spotlight">
             <div className="content">
@@ -103,7 +98,6 @@ function Home() {
           </div>
         </section>
 
-        {/* <!-- First Section --> */}
         <section id="question" className="main">
           <div className="spotlight">
             <div className="content">
@@ -133,7 +127,6 @@ function Home() {
           </div>
         </section>
 
-        {/* <!-- First Section --> */}
         <section id="question" className="main">
           <div className="spotlight">
             <div className="content">
@@ -158,7 +151,7 @@ function Home() {
           </div>
         </section>
 
-        <section id="gcp" className="main">
+        <section id="gcp" className="main" style={{ marginBottom: '3em' }}>
           <div className="spotlight">
             <div className="content">
               <header className="major">
@@ -175,96 +168,7 @@ function Home() {
             </span>
           </div>
         </section>
-
-        {/* <!-- Get Started --> */}
-        <section id="cta" className="main special">
-          <header className="major">
-            <h2>Congue imperdiet</h2>
-            <p>
-              Donec imperdiet consequat consequat. Suspendisse feugiat congue
-              <br />
-              posuere. Nulla massa urna, fermentum eget quam aliquet.
-            </p>
-          </header>
-          <footer className="major">
-            <ul className="actions special">
-              <li>
-                <a href="generic.html" className="button primary">
-                  Get Started
-                </a>
-              </li>
-              <li>
-                <a href="generic.html" className="button">
-                  Learn More
-                </a>
-              </li>
-            </ul>
-          </footer>
-        </section>
       </div>
-
-      {/* <!-- Footer --> */}
-      <footer id="footer">
-        <section>
-          <h2>Aliquam sed mauris</h2>
-          <p>
-            Sed lorem ipsum dolor sit amet et nullam consequat feugiat consequat
-            magna adipiscing tempus etiam dolore veroeros. eget dapibus mauris.
-            Cras aliquet, nisl ut viverra sollicitudin, ligula erat egestas
-            velit, vitae tincidunt odio.
-          </p>
-          <ul className="actions">
-            <li>
-              <a href="generic.html" className="button">
-                Learn More
-              </a>
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h2>Etiam feugiat</h2>
-          <dl className="alt">
-            <dt>Address</dt>
-            <dd>1234 Somewhere Road &bull; Nashville, TN 00000 &bull; USA</dd>
-            <dt>Phone</dt>
-            <dd>(000) 000-0000 x 0000</dd>
-            <dt>Email</dt>
-            <dd>
-              <a href="#">information@untitled.tld</a>
-            </dd>
-          </dl>
-          <ul className="icons">
-            <li>
-              <a href="#" className="icon brands fa-twitter alt">
-                <span className="label">Twitter</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="icon brands fa-facebook-f alt">
-                <span className="label">Facebook</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="icon brands fa-instagram alt">
-                <span className="label">Instagram</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="icon brands fa-github alt">
-                <span className="label">GitHub</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="icon brands fa-dribbble alt">
-                <span className="label">Dribbble</span>
-              </a>
-            </li>
-          </ul>
-        </section>
-        <p className="copyright">
-          &copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.
-        </p>
-      </footer>
     </div>
   );
 }

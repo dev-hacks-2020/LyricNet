@@ -4,6 +4,7 @@ import { Row, Col, InputGroup, FormControl, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import QuestionImg from '../images/question.svg';
 import axios from 'axios';
+const profanity = require('profanity-censor');
 
 class Question extends Component {
   constructor(props) {
