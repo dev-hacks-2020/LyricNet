@@ -150,7 +150,7 @@ class Complete extends Component {
                       Markov Chain
                     </Link>
                   </Col>
-                  <Col>
+                  {/* <Col>
                     <Link
                       onClick={(e) => {
                         this.setState({ model: 'GRU', artist: '' });
@@ -159,7 +159,7 @@ class Complete extends Component {
                     >
                       GRU
                     </Link>
-                  </Col>
+                  </Col> */}
                 </Row>
                 <header className="major">
                   <h2>Pick An Artist: {this.state.artist}</h2>
