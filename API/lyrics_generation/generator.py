@@ -7,18 +7,19 @@ import tensorflow.keras
 from tensorflow.keras.models import model_from_json
 
 
-def compose_rap(lines, rhyme_list, lyrics_file, model):
+def compose_rap(lines, rhyme_list, lyrics_file, model, num_lines, maxsyllables):
     rap_vectors = []
     human_lyrics = split_lyrics_file(lyrics_file)
     initial_index = random.choice(range(len(human_lyrics) - 1))
     initial_lines = human_lyrics[initial_index:initial_index + 2]
     starting_input = []
     for line in initial_lines:
-        starting_input.append([words(line), rhyme(line, rhyme_list)])
+        starting_input.append(
+            [words(line, maxsyllables), rhyme(line, rhyme_list)])
     starting_vectors = model.predict(
         np.array([starting_input]).flatten().reshape(1, 2, 2))
     rap_vectors.append(starting_vectors)
-    for i in range(20):
+    for i in range(num_lines):
         rap_vectors.append(model.predict(
             np.array([rap_vectors[-1]]).flatten().reshape(1, 2, 2)))
     return rap_vectors
@@ -43,8 +44,7 @@ def rhyme(line, rhyme_list):
         return float_rhyme
 
 
-def words(line):
-    maxsyllables = 12
+def words(line, maxsyllables):
     count = 0
     for word in line.split(" "):
         vowels = 'aeiouy'
@@ -78,7 +78,7 @@ def rhymeindex(lyrics, artist):
     return open("./lyrics_generation/models/"+artist+"/"+artist+".rhymes", "r", encoding='utf-8').read().split("\n")
 
 
-def generate_lyrics(text_model, text_file):
+def generate_lyrics(text_model, text_file, maxsyllables):
     bars = []
     last_words = []
     lyriclength = len(open(text_file, encoding='utf-8').read().split("\n"))
@@ -86,7 +86,7 @@ def generate_lyrics(text_model, text_file):
     markov_model = markov(text_file)
     while len(bars) < lyriclength / 9 and count < lyriclength * 2:
         bar = markov_model.make_sentence(max_overlap_ratio=.47, tries=300)
-        if type(bar) != type(None) and words(bar) < 1:
+        if type(bar) != type(None) and words(bar, maxsyllables) < 1:
             def get_last_word(bar):
                 last_word = bar.split(" ")[-1]
                 return last_word
@@ -104,8 +104,8 @@ def markov(text_file):
     return text_model
 
 
-def vectors_into_song(vectors, generated_lyrics, rhyme_list):
-    maxsyllables = 12
+def vectors_into_song(vectors, generated_lyrics, rhyme_list, maxsyllables):
+    # maxsyllables = 12
 
     def last_word_compare(rap, line2):
         penalty = 0
@@ -116,7 +116,7 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
                 penalty += 0.2
         return penalty
 
-    def calculate_score(vector_half, words, rhyme, penalty):
+    def calculate_score(vector_half, words, rhyme, penalty, maxsyllables):
         desired_syllables = vector_half[0]
         desired_rhyme = vector_half[1]
         desired_syllables = desired_syllables * maxsyllables
@@ -134,7 +134,7 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
         return score
     dataset = []
     for line in generated_lyrics:
-        line_list = [line, words(line), rhyme(line, rhyme_list)]
+        line_list = [line, words(line, maxsyllables), rhyme(line, rhyme_list)]
         dataset.append(line_list)
     rap = []
     vector_halves = []
@@ -149,7 +149,8 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
                 penalty = last_word_compare(rap, line)
             else:
                 penalty = 0
-            total_score = calculate_score(vector, item[1], item[2], penalty)
+            total_score = calculate_score(
+                vector, item[1], item[2], penalty, maxsyllables)
             score_entry = [line, total_score]
             scorelist.append(score_entry)
         fixed_score_list = [0]
@@ -168,7 +169,7 @@ def vectors_into_song(vectors, generated_lyrics, rhyme_list):
     return rap
 
 
-def get_song(artist):
+def get_song(artist, num_lines, maxsyllables):
     artist = artist.lower().replace(' ', '-')
     model = "./lyrics_generation/models/"+artist+"/"+artist+".json"
     weights = "./lyrics_generation/models/"+artist+"/"+artist+".h5"
@@ -179,8 +180,9 @@ def get_song(artist):
     model = model_from_json(loaded_model_json)
     model.load_weights(weights)
     text_model = markov(text_file)
-    bars = generate_lyrics(text_model, text_file)
+    bars = generate_lyrics(text_model, text_file, maxsyllables)
     rhyme_list = rhymeindex(bars, artist)
-    vectors = compose_rap(bars, rhyme_list, text_file, model)
-    rap = vectors_into_song(vectors, bars, rhyme_list)
+    vectors = compose_rap(bars, rhyme_list, text_file,
+                          model, num_lines, maxsyllables)
+    rap = vectors_into_song(vectors, bars, rhyme_list, maxsyllables)
     return rap

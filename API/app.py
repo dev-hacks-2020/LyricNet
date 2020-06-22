@@ -53,7 +53,7 @@ def question():
 
 @app.route('/generate', methods=['GET'])
 def generate():
-    return jsonify({'lyrics': get_song(request.args.get('artist'))})
+    return jsonify({'lyrics': get_song(request.args.get('artist'), int(request.args.get('lines')), int(request.args.get('syllables')))})
 
 
 if __name__ == '__main__':

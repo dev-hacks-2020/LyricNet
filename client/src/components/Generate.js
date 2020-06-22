@@ -45,6 +45,8 @@ class Generate extends Component {
       words: 50,
       lyrics: null,
       generating: false,
+      lines: 10,
+      syllables: 25,
     };
     this.focus = React.createRef();
   }
@@ -62,7 +64,11 @@ class Generate extends Component {
   getLyrics = (cb) => {
     axios
       .get('http://127.0.0.1:5000/generate', {
-        params: { artist: this.state.artist },
+        params: {
+          artist: this.state.artist,
+          lines: this.state.lines,
+          syllables: this.state.syllables,
+        },
       })
       .then((res) => {
         this.setState({ lyrics: res.data.lyrics.join('\n') });
@@ -128,21 +134,35 @@ class Generate extends Component {
                   ))}
                 </Row>
                 <Row className="justify-content-center">
-                  {/* <Col xs={6}>
-                    <label htmlFor="words">Number Of Words To Generate</label>
+                  <Col xs={4}>
+                    <label htmlFor="lines">Lines</label>
                     <InputGroup
                       onChange={(e) => {
-                        this.setState({ words: e.target.value });
+                        this.setState({ lines: e.target.value });
                       }}
                     >
                       <FormControl
-                        value={this.state.words}
+                        value={this.state.lines}
                         type="number"
-                        id="words"
+                        id="lines"
                       />
                     </InputGroup>
-                  </Col> */}
-                  <Col xs={6}>
+                  </Col>
+                  <Col xs={4}>
+                    <label htmlFor="syllables">Syllables Per Line</label>
+                    <InputGroup
+                      onChange={(e) => {
+                        this.setState({ syllables: e.target.value });
+                      }}
+                    >
+                      <FormControl
+                        value={this.state.syllables}
+                        type="number"
+                        id="syllables"
+                      />
+                    </InputGroup>
+                  </Col>
+                  <Col xs={4}>
                     <Link
                       onClick={() => {
                         this.getLyrics(this.handleOnClick);
